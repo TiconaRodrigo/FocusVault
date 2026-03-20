@@ -1120,6 +1120,176 @@
   });
 
   /* ═══════════════════════════════════════════════════════════════
+     TUTORIAL
+  ════════════════════════════════════════════════════════════════ */
+
+  const TUTORIAL_KEY = 'sala_trabajo_skip_tutorial';
+  const tutorialOverlay = $('#js-tutorial-overlay');
+  const tutorialSpotlight = $('#js-tutorial-spotlight');
+  const tutorialCard = $('#js-tutorial-card');
+  const tutorialStepNum = $('#js-tutorial-step-num');
+  const tutorialTitle = $('#js-tutorial-title');
+  const tutorialText = $('#js-tutorial-text');
+  const tutorialPrev = $('#js-tutorial-prev');
+  const tutorialNext = $('#js-tutorial-next');
+  const tutorialSkip = $('#js-tutorial-skip');
+
+  const tutorialSteps = [
+    {
+      target: '#js-workspace-title',
+      title: 'Nombre del espacio',
+      text: 'Escribe un nombre para tu sesión de trabajo. Esto te ayudará a identificarla en el historial.',
+    },
+    {
+      target: '#js-timer-display',
+      title: 'Temporizador',
+      text: 'Aquí se muestra el tiempo restante del bloque actual. El anillo verde indica el progreso.',
+    },
+    {
+      target: '.session-controls',
+      title: 'Controles',
+      text: 'Inicia, pausa o reinicia el temporizador. Con "Saltar" pasas directamente al siguiente bloque o descanso.',
+    },
+    {
+      target: '#js-blocks-indicator',
+      title: 'Progreso de bloques',
+      text: 'Muestra cuántos bloques has completado. Los puntos entre ellos indican los descansos.',
+    },
+    {
+      target: '.templates-panel',
+      title: 'Plantillas rápidas',
+      text: 'Selecciona una plantilla para configurar rápidamente tu sesión: 1h, 2h o 3h de estudio.',
+    },
+    {
+      target: '#js-config-toggle',
+      title: 'Configuración personalizada',
+      text: 'Aquí puedes ajustar los tiempos de estudio, descansos y cantidad de bloques a tu medida.',
+    },
+    {
+      target: '.ambient-panel',
+      title: 'Sonidos de ambiente',
+      text: 'Elige un sonido de fondo (lluvia, bosque, café...) para concentrarte mejor. Ajusta el volumen a tu gusto.',
+    },
+    {
+      target: '#js-task-input',
+      title: 'Lista de tareas',
+      text: 'Agrega las tareas que quieres completar. Al terminarlas, se registra en qué bloque lo hiciste.',
+    },
+    {
+      target: '#js-btn-end',
+      title: 'Terminar espacio',
+      text: 'Cuando termines, presiona aquí para ver tu resumen: tiempo de estudio, bloques y tareas completadas.',
+    },
+    {
+      target: '#js-btn-history',
+      title: 'Historial',
+      text: 'Revisa tus espacios anteriores organizados por fecha. Puedes ver estadísticas y eliminarlos.',
+    },
+  ];
+
+  let tutorialStep = 0;
+
+  function positionTutorial() {
+    const step = tutorialSteps[tutorialStep];
+    const target = document.querySelector(step.target);
+
+    if (!target) return;
+
+    const rect = target.getBoundingClientRect();
+    const padding = 8;
+
+    // Position spotlight
+    tutorialSpotlight.style.top = `${rect.top - padding}px`;
+    tutorialSpotlight.style.left = `${rect.left - padding}px`;
+    tutorialSpotlight.style.width = `${rect.width + padding * 2}px`;
+    tutorialSpotlight.style.height = `${rect.height + padding * 2}px`;
+
+    // Position card
+    const cardWidth = 340;
+    const cardHeight = 200;
+    const margin = 16;
+
+    let cardTop, cardLeft;
+
+    // Try below, then above, then right, then left
+    if (rect.bottom + cardHeight + margin < window.innerHeight) {
+      cardTop = rect.bottom + margin;
+      cardLeft = rect.left + rect.width / 2 - cardWidth / 2;
+    } else if (rect.top - cardHeight - margin > 0) {
+      cardTop = rect.top - cardHeight - margin;
+      cardLeft = rect.left + rect.width / 2 - cardWidth / 2;
+    } else if (rect.right + cardWidth + margin < window.innerWidth) {
+      cardTop = rect.top + rect.height / 2 - cardHeight / 2;
+      cardLeft = rect.right + margin;
+    } else {
+      cardTop = rect.top + rect.height / 2 - cardHeight / 2;
+      cardLeft = rect.left - cardWidth - margin;
+    }
+
+    // Clamp to viewport
+    cardLeft = Math.max(margin, Math.min(cardLeft, window.innerWidth - cardWidth - margin));
+    cardTop = Math.max(margin, Math.min(cardTop, window.innerHeight - cardHeight - margin));
+
+    tutorialCard.style.top = `${cardTop}px`;
+    tutorialCard.style.left = `${cardLeft}px`;
+    tutorialCard.style.transform = 'none';
+  }
+
+  function renderTutorialStep() {
+    const step = tutorialSteps[tutorialStep];
+    const total = tutorialSteps.length;
+
+    tutorialStepNum.textContent = `Paso ${tutorialStep + 1} de ${total}`;
+    tutorialTitle.textContent = step.title;
+    tutorialText.textContent = step.text;
+
+    tutorialPrev.style.visibility = tutorialStep === 0 ? 'hidden' : 'visible';
+    tutorialNext.textContent = tutorialStep === total - 1 ? 'Finalizar' : 'Siguiente';
+
+    positionTutorial();
+  }
+
+  function startTutorial() {
+    tutorialStep = 0;
+    tutorialOverlay.style.display = 'block';
+    renderTutorialStep();
+  }
+
+  function closeTutorial() {
+    tutorialOverlay.style.display = 'none';
+    if (tutorialSkip.checked) {
+      localStorage.setItem(TUTORIAL_KEY, '1');
+    }
+  }
+
+  tutorialNext.addEventListener('click', () => {
+    if (tutorialStep < tutorialSteps.length - 1) {
+      tutorialStep++;
+      renderTutorialStep();
+    } else {
+      closeTutorial();
+    }
+  });
+
+  tutorialPrev.addEventListener('click', () => {
+    if (tutorialStep > 0) {
+      tutorialStep--;
+      renderTutorialStep();
+    }
+  });
+
+  tutorialOverlay.addEventListener('click', (e) => {
+    if (e.target === tutorialOverlay) closeTutorial();
+  });
+
+  // Recalculate on resize
+  window.addEventListener('resize', () => {
+    if (tutorialOverlay.style.display !== 'none') {
+      positionTutorial();
+    }
+  });
+
+  /* ═══════════════════════════════════════════════════════════════
      INIT
   ════════════════════════════════════════════════════════════════ */
 
@@ -1138,6 +1308,12 @@
     updateRingProgress();
     updateSessionBadge();
     updateControls();
+
+    // Show tutorial if not skipped
+    const skipTutorial = localStorage.getItem(TUTORIAL_KEY);
+    if (!skipTutorial) {
+      setTimeout(startTutorial, 500);
+    }
   }
 
   init();

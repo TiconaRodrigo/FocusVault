@@ -1349,3 +1349,96 @@ svg { display: block; flex-shrink: 0; }
   font-size: 10px;
   color: var(--text-muted);
 }
+
+/* ─────────────────────────── TUTORIAL ────────────────────────── */
+.tutorial-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+}
+
+.tutorial-spotlight {
+  position: absolute;
+  border: 2px solid var(--accent);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 201;
+}
+
+.tutorial-card {
+  position: absolute;
+  z-index: 202;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  max-width: 340px;
+  width: 90vw;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tutorial-card__step {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-text);
+  margin-bottom: var(--space-sm);
+  letter-spacing: 0.06em;
+}
+
+.tutorial-card__title {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.tutorial-card__text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-md);
+}
+
+.tutorial-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border);
+}
+
+.tutorial-card__actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.tutorial-skip-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.tutorial-skip-label input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Position helpers */
+.tutorial-card--center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
