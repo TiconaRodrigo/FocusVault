@@ -30,6 +30,11 @@
                maxlength="60" autocomplete="off" />
       </div>
       <div class="workspace__header-right">
+        <button class="btn btn--ghost btn--icon-only" id="js-btn-tutorial" type="button" title="Ver tutorial">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+          </svg>
+        </button>
         <button class="btn btn--ghost btn--icon-only" id="js-btn-history" type="button" title="Historial">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
@@ -387,6 +392,31 @@
       <div class="modal__footer">
         <button class="btn btn--ghost" id="js-detail-delete" type="button" style="color:#c47a7a">Eliminar</button>
         <button class="btn btn--primary" id="js-detail-close" type="button">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bienvenida -->
+  <div class="welcome-overlay" id="js-welcome-overlay" style="display:none">
+    <div class="welcome-card">
+      <div class="welcome-card__icon">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="24" cy="24" r="20"/>
+          <path d="M24 14v10l7 4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1 class="welcome-card__title">Bienvenido a FocusVault</h1>
+      <p class="welcome-card__text">
+        Tu refugio digital para el trabajo profundo. Gestiona tus tareas, sincroniza tus ciclos de enfoque y personaliza tu ambiente. Todo tu progreso se guarda localmente.
+      </p>
+      <div class="welcome-card__footer">
+        <label class="welcome-skip-label">
+          <input type="checkbox" id="js-welcome-skip" />
+          <span>No mostrar de nuevo</span>
+        </label>
+        <button class="btn btn--primary" id="js-welcome-start" type="button">
+          Empezar a trabajar
+        </button>
       </div>
     </div>
   </div>

@@ -73,6 +73,12 @@
   const detailDelete = $('#js-detail-delete');
   const detailClose = $('#js-detail-close');
 
+  // Welcome & Tutorial buttons
+  const welcomeOverlay = $('#js-welcome-overlay');
+  const welcomeSkip = $('#js-welcome-skip');
+  const welcomeStart = $('#js-welcome-start');
+  const btnTutorial = $('#js-btn-tutorial');
+
   /* ─────────────────────────── STATE ──────────────────────────── */
   let config = {
     studyMinutes: 25,
@@ -1290,6 +1296,35 @@
   });
 
   /* ═══════════════════════════════════════════════════════════════
+     WELCOME + TUTORIAL LAUNCH
+  ════════════════════════════════════════════════════════════════ */
+
+  const WELCOME_KEY = 'sala_trabajo_skip_welcome';
+
+  function showWelcome() {
+    welcomeOverlay.style.display = 'flex';
+  }
+
+  function closeWelcome() {
+    welcomeOverlay.style.display = 'none';
+    if (welcomeSkip.checked) {
+      localStorage.setItem(WELCOME_KEY, '1');
+    }
+    // Start tutorial after welcome
+    const skipTutorial = localStorage.getItem(TUTORIAL_KEY);
+    if (!skipTutorial) {
+      setTimeout(startTutorial, 300);
+    }
+  }
+
+  welcomeStart.addEventListener('click', closeWelcome);
+  welcomeOverlay.addEventListener('click', (e) => {
+    if (e.target === welcomeOverlay) closeWelcome();
+  });
+
+  btnTutorial.addEventListener('click', startTutorial);
+
+  /* ═══════════════════════════════════════════════════════════════
      INIT
   ════════════════════════════════════════════════════════════════ */
 
@@ -1309,10 +1344,10 @@
     updateSessionBadge();
     updateControls();
 
-    // Show tutorial if not skipped
-    const skipTutorial = localStorage.getItem(TUTORIAL_KEY);
-    if (!skipTutorial) {
-      setTimeout(startTutorial, 500);
+    // Show welcome if not skipped
+    const skipWelcome = localStorage.getItem(WELCOME_KEY);
+    if (!skipWelcome) {
+      setTimeout(showWelcome, 400);
     }
   }
 
